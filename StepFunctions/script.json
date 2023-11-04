@@ -1,0 +1,41 @@
+// SHOULD OPEN STEP FUNCTIONS TAB THEN CREATE NEWONE
+// THIS SCRIPT WAS MADE BY DESIGNER + SOME EDDIT ON sa-east-1
+// SHOULD USE A LAMBDA WITH CALLBACK TO WORK OK
+
+{
+    "Comment": "A description of my state machine",
+    "StartAt": "Invoke Lambda Function",
+    "States": {
+      "Invoke Lambda Function": {
+        "Type": "Task",
+        "Resource": "arn:aws:states:::lambda:invoke",
+        "Parameters": {
+          "FunctionName": "arn:aws:lambda:sa-east-1:103673429893:function:HelloStepFunction:$LATEST",
+          "Payload.$": "$"
+        },
+        "Next": "Choice"
+      },
+      "Choice": {
+        "Type": "Choice",
+        "Choices": [
+          {
+            "Variable": "$.Payload",
+            "StringMatches": "*Vini*",
+            "Next": "IsTeatcher"
+          }
+        ],
+        "Default": "Not Teatcher"
+      },
+      "Not Teatcher": {
+        "Type": "Fail",
+        "Error": "ErrorCode",
+        "Cause": "Vini the teatcher was not found in output of lambda function"
+      },
+      "IsTeatcher": {
+        "Type": "Pass",
+        "End": true,
+        "Comment": "Vini is Teatcher",
+        "Result": "Wohoooo!"
+      }
+    }
+  }
